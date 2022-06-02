@@ -1,0 +1,17 @@
+{
+  "LedgerVersion": "kotlin.Long",
+  "Uint64": "kotlin.Long",
+  "AptosAddress": "kotlin.String",
+  "HexEncodedBytes": "kotlin.String",
+  "TimestampSec": "kotlin.Long",
+  "TimestampUsec": "kotlin.Long",
+  "EventKey": "kotlin.String",
+  "EventSequenceNumber": "kotlin.Long",
+  "MoveStructTagId": "kotlin.String",
+  "MoveTypeTagId": "kotlin.String",
+  "MoveTypeId": "kotlin.String",
+  "MoveModuleId": "kotlin.String",
+  "TokenId": "kotlin.String",
+  "CollectionId": "kotlin.String",
+  "OwnershipId": "kotlin.String"
+}

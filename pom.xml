@@ -38,7 +38,7 @@
     <properties>
         <revision>1.0</revision>
         <generator.kotlin>kotlin</generator.kotlin>
-        <generator.package>com.rarible.protocol.dto</generator.package>
+        <generator.package>com.rarible.protocol.dto.aptos</generator.package>
 
         <dir.target.classes>${basedir}/target/classes</dir.target.classes>
         <dir.target.temp>${basedir}/target/temp</dir.target.temp>
@@ -67,7 +67,32 @@
 
             <dependency>
                 <groupId>com.rarible.protocol.aptos</groupId>
-                <artifactId>aptoc-protocol-model</artifactId>
+                <artifactId>aptos-protocol-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.protocol.aptos</groupId>
+                <artifactId>aptos-protocol-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.protocol.aptos</groupId>
+                <artifactId>aptos-protocol-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.protocol.aptos</groupId>
+                <artifactId>aptos-protocol-client-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.protocol.aptos</groupId>
+                <artifactId>aptos-protocol-subscriber</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.protocol.aptos</groupId>
+                <artifactId>aptos-protocol-subscriber-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -144,10 +169,20 @@
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>1.6.21</version>
         </dependency>
+        <dependency>
+            <groupId>com.rarible.codegen</groupId>
+            <artifactId>model-generator</artifactId>
+            <version>${rarible.codegen.model.version}</version>
+        </dependency>
     </dependencies>
 
     <modules>
         <module>aptos-protocol-model</module>
+        <module>aptos-protocol-api</module>
+        <module>aptos-protocol-client</module>
+        <module>aptos-protocol-client-starter</module>
+        <module>aptos-protocol-subscriber</module>
+        <module>aptos-protocol-subscriber-starter</module>
     </modules>
 
 

@@ -1,0 +1,450 @@
+openapi: 3.0.3
+info:
+  title: Aptos Dev API Specification
+  description: >
+    The Aptos Node API is a RESTful API for client applications to interact with the Aptos blockchain.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.1
+  contact:
+    name: Aptos
+    url: https://github.com/aptos-labs/aptos-core
+tags:
+  - name: general
+    description: General information
+  - name: transactions
+    description: Access to transactions
+  - name: accounts
+    description: Access to account resources and modules
+  - name: events
+    description: Access to events
+paths:
+  /tokens/all:
+    get:
+      description: "Returns all tokens"
+      operationId: getAllTokens
+      parameters:
+        - name: "offset"
+          in: query
+          required: false
+          description:
+            offset of the tokens to be returned from the first token.
+          schema:
+            type: integer
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /tokens/{tokenId}:
+    get:
+      description: "Returns Token by Id"
+      operationId: getTokenById
+      parameters:
+        - name: "tokenId"
+          in: path
+          required: true
+          description: "Token Id has format `${creator_address}::${collection_name}::${token_name}`"
+          schema:
+            $ref: "#/components/schemas/TokenId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        '404':
+          $ref: '#/components/responses/404'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  /tokens/{tokenId}/meta:
+    get:
+      description: "Returns token metadata by Id"
+      operationId: getTokenMetaDataById
+      parameters:
+        - name: "tokenId"
+          in: path
+          required: true
+          description: "Token Id has format `${creator_address}::${collection_name}::${token_name}`"
+          schema:
+            $ref: "#/components/schemas/TokenMetaData"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        '404':
+          $ref: '#/components/responses/404'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  /tokens/{tokenId}/royalties:
+    get:
+      description: Returns token royalty by tokenId
+      operationId: getTokenRoyaltiesById
+      parameters:
+        - name: "tokenId"
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/TokenId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Royalties"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /metadata/byIds:
+    post:
+      description: "Returns Token MetaData by Ids"
+      operationId: getTokenMetaDataByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenIds"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenMetaData"
+        '404':
+          $ref: '#/components/responses/404'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  /tokens/byIds:
+    post:
+      description: "Returns Tokens by Ids"
+      operationId: getTokenByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenIds"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '404':
+          $ref: "#/components/responses/404"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /ownerships/all:
+    get:
+      description: "Returns all ownerships"
+      operationId: getAllOwnerships
+      parameters:
+        - name: "offset"
+          in: query
+          required: false
+          description:
+            offset of the ownership to be returned from the first ownership.
+          schema:
+            type: integer
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownerships"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /ownerships/{ownershipId}:
+    get:
+      description: "Returns ownership by Id"
+      operationId: getOwnershipById
+      parameters:
+        - name: "ownershipId"
+          in: path
+          required: true
+          description: Ownership Id has the format of "${tokenID}::${ownerAddress}"
+          schema:
+            $ref: "#/components/schemas/OwnershipId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownership"
+        '404':
+          $ref: "#/components/responses/404"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /ownerships/byToken:
+    get:
+      description: "Returns ownerships by token"
+      operationId: getOwnershipsByToken
+      parameters:
+        - name: "tokenId"
+          in: query
+          required: true
+          description: "TokenId, has format `${creator_address}::${collection_name}::${token_name}`"
+          schema:
+            $ref: "#/components/schemas/TokenId"
+        - name: "offset"
+          in: query
+          required: false
+          description: "offset from the first ownership to be returned"
+          schema:
+            type: integer
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of tokens to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownerships"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /ownerships/byIds:
+    post:
+      description: "Returns Ownerships by Ids"
+      operationId: getOwnershipsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Ownerships"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownership"
+        '404':
+          $ref: "#/components/responses/404"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /collections/{CollectionId}:
+    get:
+      description: "Returns collection by collection id"
+      operationId: getCollectionById
+      parameters:
+        - name: "CollectionId"
+          in: path
+          required: true
+          description: "Id of the collection"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collection"
+        '404':
+          $ref: "#/components/responses/404"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /collections/all:
+    get:
+      description: "Returns all collections"
+      operationId: getAllCollections
+      parameters:
+        - name: "offset"
+          in: query
+          required: false
+          description:
+            offset of the collections to be returned from the first collection.
+          schema:
+            type: integer
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+  /activities/byUser:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by user"
+      operationId: getActivitiesByUser
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/UserActivityType"
+        - name: "user"
+          in: query
+          required: true
+          description: "Addresses of the users"
+          schema:
+            type: array
+            items:
+              "$ref": "#/components/schemas/AptosAddress"
+        - name: "from"
+          in: query
+          required: false
+          description: "Lower time border of data"
+          schema:
+            type: string
+            format: "date-time"
+        - name: "to"
+          in: query
+          required: false
+          description: "Upper time border of data"
+          schema:
+            type: string
+            format: "date-time"
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/400"
+        '500':
+          $ref: "#/components/responses/500"
+components:
+  responses:
+    "400":
+      description: |
+        Bad request due to a client error: invalid request headers, parameters or body.
+        Client should not retry the request without modification.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/AptosError"
+            example:
+              code: 400
+              message: "invalid parameter"
+    "404":
+      description: |
+        Resource or data not found.
+        Client may retry the request if it is waiting for transaction execution or ledger synchronization.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/AptosError"
+            example:
+              code: 404
+              message: "resource not found"
+              aptos_ledger_version: "37829327"
+    "413":
+      description: |
+        The request payload is too large.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/AptosError"
+            example:
+              code: 413
+              message: "The request payload is too large"
+    "415":
+      description: |
+        The request's content-type is not supported.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/AptosError"
+            example:
+              code: 415
+              message: "The request's content-type is not supported"
+    "500":
+      description: |
+        Server internal error, caused by unexpected issues.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/AptosError"
+            example:
+              code: 500
+              message: "unexpected internal error"
