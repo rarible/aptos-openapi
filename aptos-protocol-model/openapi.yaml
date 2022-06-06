@@ -176,7 +176,7 @@ components:
         - uri
         - mintedAt
     CollectionId:
-      title: Colelction Id
+      title: Collection Id
       description: A Id of a collection with the format of ${creator_address}::${collection_name}
       type: string
       example: "0x1::my_awesome_collection"
