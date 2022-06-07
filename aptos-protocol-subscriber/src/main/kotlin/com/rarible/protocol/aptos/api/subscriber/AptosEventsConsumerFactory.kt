@@ -51,4 +51,16 @@ class AptosEventsConsumerFactory(
             bootstrapServers = brokerReplicaSet
         )
     }
+
+    fun createCollectionEventsConsumer(consumerGroup: String): RaribleKafkaConsumer<AptosCollectionEventDto> {
+        return RaribleKafkaConsumer(
+            clientId = "$clientIdPrefix.aptos-activity-events-consumer",
+            valueDeserializerClass = JsonDeserializer::class.java,
+            valueClass = AptosCollectionEventDto::class.java,
+            consumerGroup = consumerGroup,
+            defaultTopic = AptosCollectionEventTopicProvider.getTopic(environment),
+            offsetResetStrategy = offsetStrategy,
+            bootstrapServers = brokerReplicaSet
+        )
+    }
 }

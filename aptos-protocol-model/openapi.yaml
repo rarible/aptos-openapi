@@ -183,6 +183,7 @@ components:
     Collection:
       title: NFT collection
       description: A collection of tokens
+      type: object
       properties:
         id:
           $ref: "#/components/schemas/CollectionId"
@@ -468,3 +469,29 @@ components:
           type: string
           enum:
             - DELETE
+
+    AptosCollectionEvent:
+      type: object
+      required:
+        - eventId
+        - collectionId
+      properties:
+        eventId:
+          type: string
+        collectionId:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/AptosCollectionUpdateEvent"
+
+    AptosCollectionUpdateEvent:
+      type: object
+      required:
+        - collection
+        - "@type"
+      properties:
+        collection:
+          $ref: "#/components/schemas/Collection"
+        "@type":
+          type: string
+          enum:
+            - UPDATE
