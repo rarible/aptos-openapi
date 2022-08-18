@@ -1,3 +1,7 @@
-@Library('shared-library@stable') _
+@Library('shared-library') _
 
-buildLibrary(["credentialsId": "nexus-ext-ci"])
+pipelineConfig = [
+    "credentialsId": "nexus-ext-ci"
+]
+
+buildLibrary(pipelineConfig)
