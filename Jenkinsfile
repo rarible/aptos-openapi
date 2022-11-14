@@ -1,7 +1,7 @@
 @Library('shared-library') _
 
 def pipelineConfig = [
-    "credentialsId": "nexus-ext-ci"
+    "nexusCredentialsId": "nexus-ext-ci"
 ]
 
-buildLibrary(pipelineConfig)
+pipelineReleasePackage(pipelineConfig)
